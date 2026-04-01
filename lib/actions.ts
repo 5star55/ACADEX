@@ -41,6 +41,3 @@ export async function createMaterialAction(
   return { ok: true, message: "Material submitted." }
 }
 
-export async function dedupeCoursesAction(): Promise<void> {
-  await fetchMutation(api.materials.dedupeCourses)
-}
