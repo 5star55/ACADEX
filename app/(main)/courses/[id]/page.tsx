@@ -8,7 +8,7 @@ export default async function page({params}:{params:Promise<{id:string}>}) {
     const listmaterials= await fetchQuery(api.materials.listMaterialsByCourse, {courseCode: id})
   return (
     <div>
-      <ul className='grid grid-cols-2 gap-8 mx-10'>
+      <ul className='flex flex-col sm:grid sm:grid-cols-2 gap-8 mx-10'>
         {listmaterials.map((mat)=>(
             <li key={mat._id}><MaterialCard material={mat}/></li>
         ))}
