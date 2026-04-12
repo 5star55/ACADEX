@@ -5,17 +5,20 @@ import { api } from "@/convex/_generated/api"
 import { CourseMaterial } from "@/lib/data"
 import { useMutation } from "convex/react"
 import { useState } from "react"
+import { cn } from "@/lib/utils"
 
 type DownloadButtonProps = {
   children: React.ReactNode
   href: string
   material: CourseMaterial
+  className?: string
 }
 
 export default function DownloadButton({
   children,
   href,
   material,
+  className,
 }: DownloadButtonProps) {
   const addDownload = useMutation(api.materials.addDownload)
   const [isDownloading, setIsDownloading] = useState(false)
@@ -48,6 +51,7 @@ export default function DownloadButton({
     <a
       href={href}
       download
+      className={cn(className)}
       onClick={(event) => {
         void handleDownload(event)
       }}

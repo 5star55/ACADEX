@@ -1,3 +1,4 @@
+import { paginationOptsValidator } from "convex/server";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { normalizeCourseCode } from "./utils";
@@ -13,7 +14,7 @@ export const createMaterial = mutation({
   args: {
     title: v.string(),
     category: v.string(),
-    courseCode: v.string(),
+    courseCode: v.string(), 
     uploaderName: v.string(),
     date: v.string(),
     fileId: v.id("_storage"),
@@ -72,6 +73,122 @@ export const listMaterials = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("materials").collect();
+  },
+});
+
+export const listMaterialCategories = query({
+  args: {},
+  handler: async (ctx) => {
+    const materials = await ctx.db.query("materials").collect();
+
+    return [...new Set(materials.map((material) => material.category))].sort();
+  },
+});
+
+export const listMaterialsPaginated = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    searchQuery: v.optional(v.string()),
+    category: v.optional(v.string()),
+    courseCode: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const searchQuery = args.searchQuery?.trim().toLowerCase() ?? "";
+    const category = args.category?.trim() ?? "";
+    const normalizedCourseCode = args.courseCode
+      ? normalizeCourseCode(args.courseCode)
+      : "";
+
+    const result = await ctx.db.query("materials").order("asc").paginate(args.paginationOpts);
+
+    const page = result.page.filter((material) => {
+      const matchesSearch =
+        searchQuery.length === 0 ||
+        [
+          material.title,
+          material.courseCode,
+          material.category,
+          material.uploaderName,
+        ].some((value) => value.toLowerCase().includes(searchQuery));
+
+      const matchesCategory = category.length === 0 || material.category === category;
+      const matchesCourse =
+        normalizedCourseCode.length === 0 ||
+        normalizeCourseCode(material.courseCode) === normalizedCourseCode;
+
+      return matchesSearch && matchesCategory && matchesCourse;
+    });
+
+    return {
+      ...result,
+      page,
+    };
+  },
+});
+
+export const listMaterialsPage = query({
+  args: {
+    page: v.number(),
+    pageSize: v.number(),
+    searchQuery: v.optional(v.string()),
+    category: v.optional(v.string()),
+    courseCode: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const searchQuery = args.searchQuery?.trim().toLowerCase() ?? "";
+    const category = args.category?.trim() ?? "";
+    const normalizedCourseCode = args.courseCode
+      ? normalizeCourseCode(args.courseCode)
+      : "";
+
+    const allMaterials = await ctx.db.query("materials").collect();
+    const categories = [...new Set(allMaterials.map((material) => material.category))].sort();
+    const courses = [...new Set(allMaterials.map((material) => material.courseCode))].sort();
+
+    const filteredMaterials = allMaterials
+      .filter((material) => {
+        const matchesSearch =
+          searchQuery.length === 0 ||
+          [
+            material.title,
+            material.courseCode,
+            material.category,
+            material.uploaderName,
+          ].some((value) => value.toLowerCase().includes(searchQuery));
+
+        const matchesCategory = category.length === 0 || material.category === category;
+        const matchesCourse =
+          normalizedCourseCode.length === 0 ||
+          normalizeCourseCode(material.courseCode) === normalizedCourseCode;
+
+        return matchesSearch && matchesCategory && matchesCourse;
+      })
+      .sort((a, b) => {
+        const timeDifference =
+          new Date(b.date).getTime() - new Date(a.date).getTime();
+
+        if (timeDifference !== 0) {
+          return timeDifference;
+        }
+
+        return b._creationTime - a._creationTime;
+      });
+
+    const totalItems = filteredMaterials.length;
+    const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / args.pageSize);
+    const safePage =
+      totalPages === 0 ? 1 : Math.min(Math.max(1, Math.floor(args.page)), totalPages);
+    const startIndex = (safePage - 1) * args.pageSize;
+    const page = filteredMaterials.slice(startIndex, startIndex + args.pageSize);
+
+    return {
+      page,
+      totalItems,
+      totalPages,
+      currentPage: safePage,
+      categories,
+      courses,
+    };
   },
 });
 
@@ -155,5 +272,3 @@ export const listMaterialsByCourse = query({
   normalizeCourseCode(mat.courseCode)===normalizedCourseCode)
   },
 });
-
-

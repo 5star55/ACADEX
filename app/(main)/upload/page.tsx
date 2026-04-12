@@ -1,16 +1,11 @@
 "use client"
 import { createMaterialAction } from "@/lib/actions"
-import { useMutation } from "convex/react"
-import { api } from "@/convex/_generated/api"
 import React, { useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { File, FileUp} from 'lucide-react'
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -34,7 +29,7 @@ type ActionState = {
 
 const initialState: ActionState = { ok: false }
 
-export default function page() {
+export default function Page() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileId, setFileId] = useState("");
   const [uploading, setUploading] =useState(false);
@@ -58,7 +53,7 @@ export default function page() {
       });
       const { storageId } = await uploadRes.json();
       setFileId(storageId);
-    } catch (err) {
+    } catch {
       alert("File upload failed. Try again.");
     } finally {
       setUploading(false);

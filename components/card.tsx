@@ -1,7 +1,4 @@
 import React from 'react'
-import {ThumbsUp} from 'lucide-react'
-import { Download } from 'lucide-react'
-import DownloadButton from "@/components/DownloadButton"
 import Link from 'next/link'
 import {
   Card,
