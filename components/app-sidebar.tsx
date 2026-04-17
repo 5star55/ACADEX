@@ -48,7 +48,7 @@ export function AppSidebar() {
 
            <SidebarMenuItem>
             <SidebarMenuButton asChild className="justify-center text-center">
-              <Link href='/upload'>Profile</Link>
+              <Link href='/profile'>Profile</Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
 

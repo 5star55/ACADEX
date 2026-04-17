@@ -17,4 +17,13 @@ export default defineSchema({
     count: v.number(),
     latestMaterialId: v.id("materials"),
   }),
+  users: defineTable({
+  authUserId: v.string(),
+  email: v.string(),
+  name: v.string(),
+})
+  .index("by_auth_user_id", ["authUserId"])
+  .index("by_email", ["email"]),
+
+
 });
