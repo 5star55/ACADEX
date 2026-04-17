@@ -143,7 +143,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className='mt-20 mb-10 w-fit mx-auto flex flex-col items-center justify-center gap-2'>
+    <div className='mt-20 mb-10 w-fit sm:w-full mx-auto flex flex-col items-center justify-center gap-2'>
       <h1 className="text-4xl font-extrabold">Welcome to AcaDex</h1>
       <Card className="w-full max-w-sm">
         <CardHeader>
