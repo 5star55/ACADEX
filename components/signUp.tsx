@@ -1,6 +1,5 @@
 'use client'
 
-import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { authClient } from "@/lib/auth-client"
 import Link from "next/link"
 import { useState } from "react"
 import { z } from "zod"
@@ -23,9 +23,7 @@ const signUpSchema = z
     lastName: z.string().trim().min(1, "Last name is required"),
     email: z.string().email("Enter a valid email"),
     confirmEmail: z.string().email("Enter a valid email"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.email === data.confirmEmail, {
@@ -143,14 +141,15 @@ export default function SignUp() {
   }
 
   return (
-    <div className='mt-20 mb-10 w-fit sm:w-full mx-auto flex flex-col items-center justify-center gap-2'>
-      <h1 className="text-4xl font-extrabold">Welcome to AcaDex</h1>
-      <Card className="w-full max-w-sm">
+    <div className="mx-auto mt-10 mb-10 flex w-fit flex-col items-center justify-center">
+      <h1 className="text-2xl font-extrabold">Welcome to AcaDex</h1>
+      <Card className="w-full max-w-lg">
         <CardHeader>
-          <CardTitle className='text-3xl'>Create your account</CardTitle>
           <CardDescription />
           <CardAction>
-            <Button variant="link"><Link href="/login">Log In</Link></Button>
+            <Button variant="link">
+              <Link href="/login">Log In</Link>
+            </Button>
           </CardAction>
         </CardHeader>
         <CardContent>
@@ -257,9 +256,16 @@ export default function SignUp() {
               </Button>
             </div>
           </form>
+          <div className="flex items-center">
+                      <p>Don&apos;t have an account?</p>
+                      <Button variant="link">
+                        <Link href="/login">Login</Link>
+                      </Button>
+                    </div>
         </CardContent>
         <CardFooter />
       </Card>
+
     </div>
   )
 }

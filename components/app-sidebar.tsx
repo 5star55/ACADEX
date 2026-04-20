@@ -7,11 +7,13 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   useSidebar,
+  SidebarFooter,
 } from "@/components/ui/sidebar"
 import Link from 'next/link'
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
+import SignOut from "./signOut"
 
 export function AppSidebar() {
   const { isMobile, toggleSidebar } = useSidebar()
@@ -36,7 +38,7 @@ export function AppSidebar() {
 
         <SidebarMenuItem>
           <SidebarMenuButton asChild className="justify-center text-center">
-              <Link href='/'>Materials</Link>
+              <Link href='/materials'>Materials</Link>
            </SidebarMenuButton>
         </SidebarMenuItem>
 
@@ -54,6 +56,15 @@ export function AppSidebar() {
 
         </SidebarMenu>
       </SidebarContent>
+
+      <SidebarFooter>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        
+          <SignOut/>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  </SidebarFooter>
     </Sidebar>
   )
 }

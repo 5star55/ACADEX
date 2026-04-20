@@ -9,18 +9,16 @@ function env(name: string) {
 
 const baseURL = env("BETTER_AUTH_URL") || "http://localhost:3000";
 const dashboardApiKey = env("BETTER_AUTH_API_KEY");
-const dashboardApiUrl = env("BETTER_AUTH_API_URL");
-const dashboardKvUrl = env("BETTER_AUTH_KV_URL");
 const mysqlUrl = env("MYSQL_URL");
 
 if (!mysqlUrl) {
   throw new Error("MYSQL_URL is required for Better Auth.");
 }
 
-const dialect = createPool(mysqlUrl);
+const database = createPool(mysqlUrl);
 
 export const auth = betterAuth({
-  database: { dialect, type: "mysql" },
+  database,
   baseURL,
   emailAndPassword: { enabled: true },
   plugins: dashboardApiKey

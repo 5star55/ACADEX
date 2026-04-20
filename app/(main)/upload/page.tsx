@@ -1,5 +1,6 @@
 "use client"
 import { createMaterialAction } from "@/lib/actions"
+import { authClient } from "@/lib/auth-client"
 import React, { useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { File, FileUp} from 'lucide-react'
@@ -31,34 +32,37 @@ const initialState: ActionState = { ok: false }
 
 export default function Page() {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [fileId, setFileId] = useState("");
-  const [uploading, setUploading] =useState(false);
-  const [state, formAction] = useActionState(createMaterialAction, initialState);
+  const [fileId, setFileId] = useState("")
+  const [uploading, setUploading] = useState(false)
+  const [state, formAction] = useActionState(createMaterialAction, initialState)
+  const { data: sessionData, isPending: isSessionPending } = authClient.useSession()
+  const uploaderName = sessionData?.user.name ?? ""
+  const uploaderEmail = sessionData?.user.email ?? ""
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+    const files = e.target.files
+    if (!files || files.length === 0) return
     if (files.length > 1) {
-      alert("Please select only one file.");
-      e.target.value = "";
-      return;
+      alert("Please select only one file.")
+      e.target.value = ""
+      return
     }
-    setUploading(true);
+    setUploading(true)
     try {
-      const res = await fetch("/api/convex/generateUploadUrl");
-      const { url } = await res.json();
+      const res = await fetch("/api/convex/generateUploadUrl")
+      const { url } = await res.json()
       const uploadRes = await fetch(url, {
         method: "POST",
         body: files[0], 
-      });
-      const { storageId } = await uploadRes.json();
-      setFileId(storageId);
+      })
+      const { storageId } = await uploadRes.json()
+      setFileId(storageId)
     } catch {
-      alert("File upload failed. Try again.");
+      alert("File upload failed. Try again.")
     } finally {
-      setUploading(false);
+      setUploading(false)
     }
-  };
+  }
 
   return (
     <div className='mt-8 mb-15 flex justify-center flex-col items-center'>
@@ -100,10 +104,21 @@ export default function Page() {
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Uploader Name</Label>
-                <Input name="uploaderName" placeholder="e.g John Doe" type="text" />
+                <Input
+                  name="uploaderName"
+                  placeholder="e.g John Doe"
+                  type="text"
+                  value={uploaderName}
+                  readOnly
+                  disabled={isSessionPending || !uploaderName}
+                />
               </div>
+              <input name="uploaderEmail" type="hidden" value={uploaderEmail} />
               <input name="fileId" type="hidden" value={fileId} />
-              <Button type="submit" disabled={!fileId || uploading}>
+              <Button
+                type="submit"
+                disabled={!fileId || uploading || !uploaderName || !uploaderEmail}
+              >
                 {uploading ? "Uploading..." : "Publish Material"}
               </Button>
             </div>
@@ -146,5 +161,5 @@ export default function Page() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

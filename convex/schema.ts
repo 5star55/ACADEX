@@ -7,6 +7,7 @@ export default defineSchema({
     category: v.string(),
     courseCode: v.string(),
     uploaderName: v.string(),
+    uploaderEmail: v.optional(v.string()),
     date: v.string(),
     downloads: v.number(),
     upvotes: v.number(),
