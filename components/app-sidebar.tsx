@@ -16,7 +16,15 @@ import { X } from "lucide-react"
 import SignOut from "./signOut"
 
 export function AppSidebar() {
-  const { isMobile, toggleSidebar, setOpen } = useSidebar()
+  const { isMobile, toggleSidebar, setOpen, setOpenMobile } = useSidebar()
+
+  const handleNavigate = () => {
+    if(isMobile){
+      setOpenMobile(false)
+    } else {
+      setOpen(false)
+    }
+  }
 
   return (
     <Sidebar>
@@ -36,20 +44,20 @@ export function AppSidebar() {
         <SidebarMenu className="gap-8 px-2">
         <Link href='/' className="w-fit mx-auto"><Image alt='logo' width={130} height={130} src='/logo.png'/></Link>
 
-        <SidebarMenuItem>
-          <SidebarMenuButton onClick={() => setOpen(false)} asChild className="justify-center text-center">
+        <SidebarMenuItem onClick={() => handleNavigate()}>
+          <SidebarMenuButton asChild className="justify-center text-center">
               <Link href='/materials'>Materials</Link>
            </SidebarMenuButton>
         </SidebarMenuItem>
 
         <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => setOpen(false)} asChild className="justify-center text-center">
+            <SidebarMenuButton onClick={() => handleNavigate()} asChild className="justify-center text-center">
               <Link href='/courses'>Courses</Link>
             </SidebarMenuButton>
         </SidebarMenuItem>
 
-           <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => setOpen(false)} asChild className="justify-center text-center">
+           <SidebarMenuItem onClick={() => handleNavigate()}>
+            <SidebarMenuButton asChild className="justify-center text-center">
               <Link href='/profile'>Profile</Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
