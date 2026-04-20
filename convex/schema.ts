@@ -7,6 +7,7 @@ export default defineSchema({
     category: v.string(),
     courseCode: v.string(),
     uploaderName: v.string(),
+    uploaderEmail: v.optional(v.string()),
     date: v.string(),
     downloads: v.number(),
     upvotes: v.number(),
@@ -17,4 +18,13 @@ export default defineSchema({
     count: v.number(),
     latestMaterialId: v.id("materials"),
   }),
+  users: defineTable({
+  authUserId: v.string(),
+  email: v.string(),
+  name: v.string(),
+})
+  .index("by_auth_user_id", ["authUserId"])
+  .index("by_email", ["email"]),
+
+
 });

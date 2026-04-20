@@ -16,6 +16,7 @@ export const createMaterial = mutation({
     category: v.string(),
     courseCode: v.string(), 
     uploaderName: v.string(),
+    uploaderEmail: v.string(),
     date: v.string(),
     fileId: v.id("_storage"),
   },
@@ -270,5 +271,56 @@ export const listMaterialsByCourse = query({
       const normalizedCourseCode = normalizeCourseCode(args.courseCode)
   return (await materials).filter((mat)=>
   normalizeCourseCode(mat.courseCode)===normalizedCourseCode)
+  },
+});
+
+export const listMaterialsByUploaderName = query({
+  args: { uploaderName: v.string() },
+  handler: async (ctx, args) => {
+    const normalizedName = args.uploaderName.trim().toLowerCase();
+    const materials = await ctx.db.query("materials").collect();
+
+    return materials
+      .filter((material) => material.uploaderName.trim().toLowerCase() === normalizedName)
+      .sort((a, b) => b._creationTime - a._creationTime);
+  },
+});
+
+export const countMaterialsByUploaderName = query({
+  args: { uploaderName: v.string() },
+  handler: async (ctx, args) => {
+    const normalizedName = args.uploaderName.trim().toLowerCase();
+    const materials = await ctx.db.query("materials").collect();
+
+    return materials.filter(
+      (material) => material.uploaderName.trim().toLowerCase() === normalizedName
+    ).length;
+  },
+});
+
+export const listMaterialsByUploaderEmail = query({
+  args: { uploaderEmail: v.string() },
+  handler: async (ctx, args) => {
+    const normalizedEmail = args.uploaderEmail.trim().toLowerCase();
+    const materials = await ctx.db.query("materials").collect();
+
+    return materials
+      .filter(
+        (material) =>
+          material.uploaderEmail?.trim().toLowerCase() === normalizedEmail
+      )
+      .sort((a, b) => b._creationTime - a._creationTime);
+  },
+});
+
+export const countMaterialsByUploaderEmail = query({
+  args: { uploaderEmail: v.string() },
+  handler: async (ctx, args) => {
+    const normalizedEmail = args.uploaderEmail.trim().toLowerCase();
+    const materials = await ctx.db.query("materials").collect();
+
+    return materials.filter(
+      (material) => material.uploaderEmail?.trim().toLowerCase() === normalizedEmail
+    ).length;
   },
 });

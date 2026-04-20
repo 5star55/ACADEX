@@ -17,6 +17,7 @@ export async function createMaterialAction(
   const courseCode = String(formData.get("courseCode") ?? "").trim()
   const category = String(formData.get("category") ?? "").trim()
   const uploaderName = String(formData.get("uploaderName") ?? "").trim()
+  const uploaderEmail = String(formData.get("uploaderEmail") ?? "").trim()
   const date = new Date().toISOString()
   const fileId = String(formData.get("fileId") ?? "").trim() as Id<"_storage">
 
@@ -24,6 +25,9 @@ export async function createMaterialAction(
   if (!title) errors.title = "Title is required."
   if (!courseCode) errors.courseCode = "Course code is required."
   if (!category) errors.category = "Category is required."
+  if (!uploaderName) errors.uploaderName = "You need to be signed in to upload."
+  if (!uploaderEmail) errors.uploaderEmail = "We couldn't identify your account."
+  if (!fileId) errors.fileId = "Please upload a file."
 
   if (Object.keys(errors).length > 0) {
     return { ok: false, errors }
@@ -34,10 +38,10 @@ export async function createMaterialAction(
     courseCode,
     category,
     uploaderName,
+    uploaderEmail,
     date,
     fileId,
   })
 
   return { ok: true, message: "Material submitted." }
 }
-

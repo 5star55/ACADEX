@@ -1,8 +1,8 @@
 import React from 'react'
-import Login from '@/components/login'
+import SignUp from '@/components/signUp'
 
 export default function page() {
   return (
-    <div><Login/></div>
+    <div><SignUp/></div>
   )
 }

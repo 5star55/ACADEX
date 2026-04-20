@@ -9,6 +9,7 @@
  */
 
 import type * as materials from "../materials.js";
+import type * as users from "../users.js";
 import type * as utils from "../utils.js";
 
 import type {
@@ -19,6 +20,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   materials: typeof materials;
+  users: typeof users;
   utils: typeof utils;
 }>;
 
