@@ -63,7 +63,7 @@ export default async function Page({
   return (
     <div className="min-h-[calc(100vh-5rem)] bg-background px-4 py-6 sm:px-6 sm:py-8 lg:px-8 mx-10">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
-        <div className='flex flex-row fap-2'>
+        <div className='inline-flex gap-2'>
           <Router><ArrowLeft/> Go Back</Router>
         </div>
 
