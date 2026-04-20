@@ -4,6 +4,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/app-sidebar"
 import ConvexClientProvider from "@/components/convex-provider"
 import { auth } from "@/lib/auth"
+import { useState} from "react"
 
 
 export default async function MainLayout({
@@ -30,3 +31,5 @@ export default async function MainLayout({
     </SidebarProvider>
   )
 }
+
+

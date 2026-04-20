@@ -16,7 +16,7 @@ import { X } from "lucide-react"
 import SignOut from "./signOut"
 
 export function AppSidebar() {
-  const { isMobile, toggleSidebar } = useSidebar()
+  const { isMobile, toggleSidebar, setOpen } = useSidebar()
 
   return (
     <Sidebar>
@@ -37,19 +37,19 @@ export function AppSidebar() {
         <Link href='/' className="w-fit mx-auto"><Image alt='logo' width={130} height={130} src='/logo.png'/></Link>
 
         <SidebarMenuItem>
-          <SidebarMenuButton asChild className="justify-center text-center">
+          <SidebarMenuButton onClick={() => setOpen(false)} asChild className="justify-center text-center">
               <Link href='/materials'>Materials</Link>
            </SidebarMenuButton>
         </SidebarMenuItem>
 
         <SidebarMenuItem>
-            <SidebarMenuButton asChild className="justify-center text-center">
+            <SidebarMenuButton onClick={() => setOpen(false)} asChild className="justify-center text-center">
               <Link href='/courses'>Courses</Link>
             </SidebarMenuButton>
         </SidebarMenuItem>
 
            <SidebarMenuItem>
-            <SidebarMenuButton asChild className="justify-center text-center">
+            <SidebarMenuButton onClick={() => setOpen(false)} asChild className="justify-center text-center">
               <Link href='/profile'>Profile</Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -60,7 +60,7 @@ export function AppSidebar() {
       <SidebarFooter>
     <SidebarMenu>
       <SidebarMenuItem>
-        
+
           <SignOut/>
       </SidebarMenuItem>
     </SidebarMenu>
