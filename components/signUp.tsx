@@ -57,6 +57,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [errors, setErrors] = useState<FieldErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   function validateField(
     field:
@@ -117,6 +118,7 @@ export default function SignUp() {
     try {
       setIsSubmitting(true)
       setErrors({})
+      setSuccess(false)
 
       const { error } = await authClient.signUp.email({
         email: result.data.email,
@@ -135,6 +137,7 @@ export default function SignUp() {
       setConfirmEmail("")
       setPassword("")
       setConfirmPassword("")
+      setSuccess(true)
     } finally {
       setIsSubmitting(false)
     }
@@ -256,14 +259,20 @@ export default function SignUp() {
               </Button>
             </div>
           </form>
-          <div className="flex items-center">
-                      <p>Don&apos;t have an account?</p>
-                      <Button variant="link">
-                        <Link href="/login">Login</Link>
-                      </Button>
-                    </div>
         </CardContent>
-        <CardFooter />
+        <CardFooter className="flex-col items-start gap-2">
+          {success ? (
+            <p className="text-sm text-green-700">
+              You have signed up successfully. You can now log in.
+            </p>
+          ) : null}
+          <div className="flex items-center">
+            <p>Already have an account?</p>
+            <Button variant="link">
+              <Link href="/login">Login</Link>
+            </Button>
+          </div>
+        </CardFooter>
       </Card>
 
     </div>
