@@ -76,6 +76,14 @@ export default function Login() {
       }
 
       router.push("/materials")
+    } catch (error) {
+      console.error("Login failed", error)
+      setErrors({
+        form:
+          error instanceof Error
+            ? error.message
+            : "Unable to log in right now",
+      })
     } finally {
       setIsSubmitting(false)
     }

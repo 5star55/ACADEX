@@ -138,6 +138,14 @@ export default function SignUp() {
       setPassword("")
       setConfirmPassword("")
       setSuccess(true)
+    } catch (error) {
+      console.error("Sign up failed", error)
+      setErrors({
+        form:
+          error instanceof Error
+            ? error.message
+            : "Unable to sign up right now",
+      })
     } finally {
       setIsSubmitting(false)
     }
